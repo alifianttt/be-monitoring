@@ -1,0 +1,138 @@
+:root {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #f4f5f7;
+  color: #1f2430;
+}
+
+.page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+
+.page h1 {
+  font-size: 22px;
+  margin-bottom: 20px;
+}
+
+.card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  padding: 20px;
+}
+
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+  align-items: flex-end;
+}
+
+.filter-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: #5b6270;
+}
+
+.filter-field input,
+.filter-field select {
+  padding: 8px 10px;
+  border: 1px solid #d7dae0;
+  border-radius: 6px;
+  font-size: 14px;
+  min-width: 160px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+th, td {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid #eceef1;
+}
+
+th {
+  cursor: pointer;
+  user-select: none;
+  color: #5b6270;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+th .sort-icon {
+  margin-left: 4px;
+  opacity: 0.6;
+}
+
+tbody tr:hover {
+  background: #fafbfc;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 0;
+  color: #8b909b;
+}
+
+.pagination {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+  font-size: 14px;
+}
+
+.pagination button {
+  padding: 6px 14px;
+  border: 1px solid #d7dae0;
+  background: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.score-pill {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.score-pill.low {
+  background: #fdecea;
+  color: #c62828;
+}
+
+.score-pill.high {
+  background: #e6f4ea;
+  color: #1e7e34;
+}
+
+.loading, .error-state {
+  padding: 24px 0;
+  text-align: center;
+  color: #8b909b;
+}
