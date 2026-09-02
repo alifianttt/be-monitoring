@@ -1,14 +1,27 @@
-<script setup>
+<script setup lang="ts">
 import { computed } from 'vue'
+import type { SentimentFilterValue } from '../types/callMonitoring'
 
-const props = defineProps({
-  search: { type: String, default: '' },
-  startDate: { type: String, default: '' },
-  endDate: { type: String, default: '' },
-  sentiment: { type: String, default: '' }
-})
+const props = withDefaults(
+  defineProps<{
+    search?: string
+    startDate?: string
+    endDate?: string
+    sentiment?: SentimentFilterValue
+  }>(),
+  {
+    search: '',
+    startDate: '',
+    endDate: '',
+    sentiment: ''
+  }
+)
 
-const emit = defineEmits(['update:search', 'update:period', 'update:sentiment'])
+const emit = defineEmits<{
+  'update:search': [value: string]
+  'update:period': [startDate: string, endDate: string]
+  'update:sentiment': [value: SentimentFilterValue]
+}>()
 
 // Story requirement: selectable period is limited to the latest three months.
 const today = new Date()
@@ -19,20 +32,20 @@ const minDate = computed(() => {
   return d.toISOString().slice(0, 10)
 })
 
-function onSearchInput(event) {
-  emit('update:search', event.target.value)
+function onSearchInput(event: Event): void {
+  emit('update:search', (event.target as HTMLInputElement).value)
 }
 
-function onStartDateChange(event) {
-  emit('update:period', event.target.value, props.endDate)
+function onStartDateChange(event: Event): void {
+  emit('update:period', (event.target as HTMLInputElement).value, props.endDate)
 }
 
-function onEndDateChange(event) {
-  emit('update:period', props.startDate, event.target.value)
+function onEndDateChange(event: Event): void {
+  emit('update:period', props.startDate, (event.target as HTMLInputElement).value)
 }
 
-function onSentimentChange(event) {
-  emit('update:sentiment', event.target.value)
+function onSentimentChange(event: Event): void {
+  emit('update:sentiment', (event.target as HTMLSelectElement).value as SentimentFilterValue)
 }
 </script>
 

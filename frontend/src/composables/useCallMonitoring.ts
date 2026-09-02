@@ -1,7 +1,34 @@
-import { reactive, ref, toRefs, watch } from 'vue'
+import { reactive, toRefs } from 'vue'
 import { fetchCallMonitoring } from '../services/callMonitoringApi'
+import type {
+  CallMonitoringRecord,
+  SentimentFilterValue,
+  SortDirection,
+  SortableColumn
+} from '../types/callMonitoring'
 
 const DEBOUNCE_MS = 350
+
+interface TableState {
+  records: CallMonitoringRecord[]
+  page: number
+  totalPages: number
+  totalElements: number
+  loading: boolean
+  error: string | null
+}
+
+interface FilterState {
+  search: string
+  startDate: string
+  endDate: string
+  sentiment: SentimentFilterValue
+}
+
+interface SortState {
+  sortBy: SortableColumn
+  sortDir: SortDirection
+}
 
 /**
  * Owns all Monitoring-table state: filters, sort, and pagination.
@@ -10,7 +37,7 @@ const DEBOUNCE_MS = 350
  * frontend" rule.
  */
 export function useCallMonitoring() {
-  const state = reactive({
+  const state = reactive<TableState>({
     records: [],
     page: 0,
     totalPages: 0,
@@ -19,21 +46,21 @@ export function useCallMonitoring() {
     error: null
   })
 
-  const filters = reactive({
+  const filters = reactive<FilterState>({
     search: '',
     startDate: '',
     endDate: '',
     sentiment: ''
   })
 
-  const sort = reactive({
+  const sort = reactive<SortState>({
     sortBy: 'callTimestamp',
     sortDir: 'desc'
   })
 
-  let debounceTimer = null
+  let debounceTimer: ReturnType<typeof setTimeout> | undefined
 
-  async function load() {
+  async function load(): Promise<void> {
     state.loading = true
     state.error = null
     try {
@@ -57,29 +84,29 @@ export function useCallMonitoring() {
     }
   }
 
-  function resetToFirstPageAndLoad() {
+  function resetToFirstPageAndLoad(): void {
     state.page = 0
     load()
   }
 
-  function setSearch(value) {
+  function setSearch(value: string): void {
     filters.search = value
     clearTimeout(debounceTimer)
     debounceTimer = setTimeout(resetToFirstPageAndLoad, DEBOUNCE_MS)
   }
 
-  function setPeriod(startDate, endDate) {
+  function setPeriod(startDate: string, endDate: string): void {
     filters.startDate = startDate
     filters.endDate = endDate
     resetToFirstPageAndLoad()
   }
 
-  function setSentiment(value) {
+  function setSentiment(value: SentimentFilterValue): void {
     filters.sentiment = value
     resetToFirstPageAndLoad()
   }
 
-  function toggleSort(column) {
+  function toggleSort(column: SortableColumn): void {
     if (sort.sortBy === column) {
       sort.sortDir = sort.sortDir === 'asc' ? 'desc' : 'asc'
     } else {
@@ -89,14 +116,14 @@ export function useCallMonitoring() {
     load()
   }
 
-  function nextPage() {
+  function nextPage(): void {
     if (state.page + 1 < state.totalPages) {
       state.page += 1
       load()
     }
   }
 
-  function prevPage() {
+  function prevPage(): void {
     if (state.page > 0) {
       state.page -= 1
       load()

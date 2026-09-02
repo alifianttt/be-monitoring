@@ -1,18 +1,24 @@
-<script setup>
-const props = defineProps({
-  records: { type: Array, default: () => [] },
-  page: { type: Number, required: true },
-  totalPages: { type: Number, required: true },
-  totalElements: { type: Number, required: true },
-  loading: { type: Boolean, default: false },
-  error: { type: String, default: null },
-  sortBy: { type: String, required: true },
-  sortDir: { type: String, required: true }
-})
+<script setup lang="ts">
+import type { CallMonitoringRecord, SortDirection, SortableColumn } from '../types/callMonitoring'
 
-const emit = defineEmits(['sort', 'next-page', 'prev-page'])
+const props = defineProps<{
+  records: CallMonitoringRecord[]
+  page: number
+  totalPages: number
+  totalElements: number
+  loading: boolean
+  error: string | null
+  sortBy: SortableColumn
+  sortDir: SortDirection
+}>()
 
-const columns = [
+const emit = defineEmits<{
+  sort: [column: SortableColumn]
+  'next-page': []
+  'prev-page': []
+}>()
+
+const columns: Array<{ key: SortableColumn; label: string }> = [
   { key: 'callId', label: 'Call ID' },
   { key: 'callTimestamp', label: 'Call Timestamp' },
   { key: 'csName', label: 'CS Name' },
@@ -20,12 +26,12 @@ const columns = [
   { key: 'sentimentScore', label: 'Sentiment Score Nasabah' }
 ]
 
-function sortIcon(column) {
+function sortIcon(column: SortableColumn): string {
   if (props.sortBy !== column) return ''
   return props.sortDir === 'asc' ? '▲' : '▼'
 }
 
-function formatTimestamp(value) {
+function formatTimestamp(value: string): string {
   return new Date(value).toLocaleString('id-ID', {
     year: 'numeric',
     month: 'short',
@@ -35,7 +41,7 @@ function formatTimestamp(value) {
   })
 }
 
-function scoreClass(score) {
+function scoreClass(score: number): 'low' | 'high' {
   return score < 70 ? 'low' : 'high'
 }
 </script>

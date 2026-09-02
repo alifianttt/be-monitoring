@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { onMounted } from 'vue'
 import FilterBar from '../components/FilterBar.vue'
 import CallMonitoringTable from '../components/CallMonitoringTable.vue'
